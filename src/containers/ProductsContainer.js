@@ -1,6 +1,7 @@
 import React from 'react'
 import ListProducts from '../components/ListProducts'
 import ProductItem from '../components/ProductItem'
+import * as actions from '../actions/index'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
@@ -11,7 +12,12 @@ class ProductsContainer extends React.Component {
         if (products.length > 0) {
             result = products.map((product, index) => {
                 return (
-                    <ProductItem key={index} product={product} />
+                    <ProductItem
+                        key={index}
+                        product={product}
+                        handleAddToCart={this.props.handleAddToCart}
+                        changeMessage={this.props.changeMessage}
+                    />
                 )
             })
         }
@@ -31,7 +37,7 @@ class ProductsContainer extends React.Component {
 ProductsContainer.propTypes = {
     products: PropTypes.arrayOf(
         PropTypes.shape({
-            id:     PropTypes.number.isRequired,
+            id: PropTypes.number.isRequired,
             name: PropTypes.string.isRequired,
             desc: PropTypes.string.isRequired,
             price: PropTypes.number.isRequired,
@@ -48,4 +54,15 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, null)(ProductsContainer);
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        handleAddToCart: (product) => {
+            dispatch(actions.actAddToCart(product, 1));
+        },
+        changeMessage: (message) => {
+            dispatch(actions.changeMessage(message))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductsContainer);

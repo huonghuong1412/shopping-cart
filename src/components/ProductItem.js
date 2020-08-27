@@ -1,4 +1,6 @@
 import React from 'react'
+import * as Message from '../constants/Message'
+
 class ProductItem extends React.Component {
 
     showRatings = (rating) => {
@@ -12,6 +14,11 @@ class ProductItem extends React.Component {
             }
         }
         return <li>{result}</li>;
+    }
+
+    handleAddToCart = (product) => {
+        this.props.handleAddToCart(product);
+        this.props.changeMessage(Message.MSG_ADD_TO_CART_SUCCESS)
     }
 
     render() {
@@ -40,9 +47,12 @@ class ProductItem extends React.Component {
                         <div className="card-footer">
                             <span className="left">{product.price}$</span>
                             <span className="right">
-                                <a href="/" className="btn-floating blue-gradient" data-toggle="tooltip" data-placement="top" data-original-title="Add to Cart">
+                                <button
+                                    className="btn-floating blue-gradient" data-toggle="tooltip" data-placement="top" data-original-title="Add to Cart"
+                                    onClick={() => this.handleAddToCart(product)}
+                                >
                                     <i className="fa fa-shopping-cart" />
-                                </a>
+                                </button>
                             </span>
                         </div>
                     </div>

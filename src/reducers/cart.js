@@ -2,42 +2,58 @@ import * as types from '../constants/ActionTypes'
 
 var data = JSON.parse(localStorage.getItem('CART'));
 
-// let defaultState = data ? data : [];
-let defaultState = [
-    {
-        product: {
-            id: 1,
-            name: "Samsung 10",
-            desc: "Mo ta san pham 1",
-            price: 500,
-            img: 'https://cdn1.viettelstore.vn/images/Product/ProductImage/medium/2135168219.jpeg',
-            inventory: 10,
-            rating: 4
-        },
-        soluong: 2
-    },
-    {
-        product: {
-            id: 4,
-            name: "Samsung 16",
-            desc: "Mo ta san pham 4",
-            price: 1000,
-            img: 'https://dienmaythienhoa.vn/static/images/4.%20hinh%20sp/Samsung-Galaxy-A30-Xanh-2.jpg',
-            inventory: 20,
-            rating: 3
-        },
-        soluong: 3
-    }
-];
+let defaultState = data ? data : [];
 
 const cart = (state = defaultState, action) => {
+    var { product, soluong } = action;
+    var index = -1;
     switch (action.type) {
         case types.ADD_TO_CART:
-            console.log(action)
+            index = findProductCart(state, product);
+            if (index !== -1) {
+                state[index].soluong += soluong;
+            } else {
+                state.push({
+                    product,
+                    soluong
+                })
+            }
+            localStorage.setItem('CART', JSON.stringify(state))
             return [...state];
+
+        case types.DELETE_ITEM_IN_CART:
+            index = findProductCart(state, product)
+            if (index !== -1) {
+                state.splice(index, 1)
+            }
+            localStorage.setItem('CART', JSON.stringify(state))
+            return [...state]
+
+        case types.UPDATE_ITEM_IN_CART:
+            index = findProductCart(state, product);
+            if (index !== -1) {
+                state[index].soluong = soluong;
+            }
+            localStorage.setItem('CART', JSON.stringify(state))
+            return [...state]
         default:
             return [...state]
     }
+}
+
+var findProductCart = (cart, product) => {
+    var index = -1;
+    if (cart.length > 0) {
+        for (var i = 0; i < cart.length; i++) {
+            if (cart[i].product.id === product.id) {
+                index = i;
+                break;
+            }
+        }
+    } else {
+        index = -1;
+    }
+    return index;
 }
 
 export default cart;

@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import * as Message from '../constants/Message'
+import * as actions from '../actions/index'
 
 import Cart from '../components/Cart'
 import CartItem from '../components/CartItem'
@@ -10,7 +11,7 @@ import CartTotal from '../components/CartTotal'
 class CartContainer extends React.Component {
 
     showCartItem = (cart) => {
-        var result = Message.MSG_CART_EMPTY;
+        var result = <tr><td>{Message.MSG_CART_EMPTY}</td></tr>;
         if (cart.length > 0) {
             result = cart.map((item, index) => {
                 return (
@@ -18,6 +19,9 @@ class CartContainer extends React.Component {
                         key={index}
                         item={item}
                         index={index}
+                        deleteItemInCart={this.props.deleteItemInCart}
+                        changeMessage={this.props.changeMessage}
+                        updateSoLuongInCart={this.props.updateSoLuongInCart}
                     ></CartItem >
                 )
             })
@@ -69,4 +73,18 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, null)(CartContainer);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        deleteItemInCart: (product) => {
+            dispatch(actions.deleteItemInCart(product))
+        },
+        changeMessage: (message) => {
+            dispatch(actions.changeMessage(message))
+        },
+        updateSoLuongInCart: (product, soluong) => {
+            dispatch(actions.updateSoLuongInCart(product, soluong))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CartContainer);
