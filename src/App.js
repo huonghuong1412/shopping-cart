@@ -3,9 +3,9 @@ import './App.css';
 
 import Header from './components/Header'
 import Footer from './components/Footer'
-import ListProducts from './components/ListProducts'
-import Cart from './components/Cart'
 import Message from './components/Message'
+import ProductsContainer from './containers/ProductsContainer';
+import CartContainer from './containers/CartContainer';
 
 class App extends React.PureComponent {
   render() {
@@ -16,13 +16,13 @@ class App extends React.PureComponent {
         <main id="mainContainer">
           <div className="container">
             {/* Products */}
-            <ListProducts />
+            <ProductsContainer />
 
             {/* Message */}
             <Message />
 
             {/* Cart */}
-            <Cart />
+            <CartContainer />
           </div>
         </main>
 
